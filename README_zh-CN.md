@@ -11,11 +11,14 @@
 | `resolve_location` | 地点（地铁站 / 商场 / 地址 / 经纬度）→ 坐标，带歧义候选 |
 | `search_nearby_malls` | 坐标 → 附近商场，按距离排序 |
 | `match_brands_in_mall` | 某个商场 → 逐个核对品牌门店是否存在 |
+| `find_nearest_brand_store` | 单个品牌 → 离用户最近的门店（替代方案用） |
 | `get_travel_distance` | 两点 → 直线 / 驾车 / 步行距离与耗时 |
 | `find_malls_with_all_brands` | 一站式：位置 + 品牌清单 → 候选商场排名与最佳推荐 |
 
-- **SSE 流式聊天** —— 逐 token 推 `text_delta`，命中工具时推 `tool_called`（前端 5 个工具指示灯）。
+- **SSE 流式聊天** —— 逐 token 推 `text_delta`，命中工具时推 `tool_called`（前端 6 个工具指示灯）。
 - **数据不由模型编造** —— 地点、门店、距离全部来自高德返回，工具失败时如实说明原因。
+- **同音字容错** —— 用户说「西厅村屋」、高德收录「西町村屋」时，工具会用近似匹配 + 全城检索兜底，并在结果里标注 `name_match: similar`。
+- **限速与重试** —— 高德个人 Key 约 3 QPS，工具内置 0.4s 全局节流与 QPS 超限退避重试，多品牌并发核对不会被限流打断。
 - **会话粘性记忆** —— `context.store.openai_session(cid)` 直接喂给 `Runner.run_streamed()` 的 `session` 参数，支持「不要求两个品牌同时存在呢」这类追问。
 - **可信取消** —— 后端 `context.utils.abort_active_run()` 真正中断 LLM 调用。
 - **后端拆两层** —— 有状态的长连接放 `agents/`，无状态的 `/history` 放 `cloud-functions/`。

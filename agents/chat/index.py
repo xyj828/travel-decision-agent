@@ -26,6 +26,7 @@ from agents import Agent, OpenAIChatCompletionsModel, Runner
 from .._logger import create_logger
 from .._tools import (
     find_malls_with_all_brands,
+    find_nearest_brand_store,
     get_travel_distance,
     match_brands_in_mall,
     resolve_location,
@@ -63,7 +64,9 @@ INSTRUCTIONS = """
 3. 核对品牌：用户点名了品牌（如「倍轻松」「西厅村屋」），必须逐个确认该商场周边是否有对应门店。
    - 一次问清多个品牌时，优先用 find_malls_with_all_brands 一次拿到结论。
    - 也可以用 match_brands_in_mall 对某个商场单独核对。
-   - 品牌名可以是模糊的（用户说「倍轻松」但门店叫「倍轻松(某某店)」），只要门店名称包含品牌关键字就算命中。
+   - 品牌名可以是模糊的：用户说的品牌常有同音字或错字（课程例子里的「西厅村屋」高德实际收录为「西町村屋」）。
+     命中判断由工具完成，注意看返回里的 name_match：exact=名称一致，similar=名称相近。
+     当 name_match=similar 时，回答里要顺带说明「高德上叫 XXX」，不要让用户以为找错了。
 4. 比距离：用 get_travel_distance 或候选结果里的 distance_m。距离一律用工具返回的米数，允许换算成公里并取整。
 5. 排序推荐：先满足「品牌全部命中」，再按距离由近到远；同距离时参考商场规模 / 类型。
 
@@ -71,7 +74,8 @@ INSTRUCTIONS = """
 - 先给一句结论：推荐哪家、距离多少、为什么。
 - 再列 1~3 个候选，每个包含：商场名、距离（米/公里）、命中的品牌与门店名、未命中的品牌。
 - 如果没有任何商场同时拥有全部品牌：明确说明「在 X 米范围内没找到同时有 A 和 B 的商场」，
-  然后给出降级方案（最近的 A、最近的 B、或放宽半径），不要编造。
+  然后用 nearest_by_brand（或 find_nearest_brand_store 逐个查）给出替代方案：
+  最近的门店距离、在哪个商场/路段，让用户在「少逛一个品牌但更近」和「跑远一点全逛到」之间选，不要编造。
 - 结尾可以问一个收敛问题，例如「需要我按驾车距离重排，或者扩大搜索范围吗？」
 
 ## 硬性约束
@@ -91,6 +95,7 @@ agent = Agent(
         resolve_location,
         search_nearby_malls,
         match_brands_in_mall,
+        find_nearest_brand_store,
         get_travel_distance,
         find_malls_with_all_brands,
     ],

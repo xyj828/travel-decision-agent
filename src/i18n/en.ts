@@ -20,6 +20,7 @@ const en = {
   "tool.locate": "Locate",
   "tool.mall": "Malls",
   "tool.brand": "Brands",
+  "tool.nearest": "Stores",
   "tool.distance": "Distance",
   "tool.plan": "Planner",
 

@@ -78,6 +78,7 @@ def main() -> int:
         "search_nearby_malls",
         "match_brands_in_mall",
         "get_travel_distance",
+        "find_nearest_brand_store",
         "find_malls_with_all_brands",
     ):
         tool = getattr(tools, name)
@@ -124,13 +125,23 @@ def main() -> int:
         if not dist.get("ok"):
             failures += 1
 
+    nearest = call(
+        tools.find_nearest_brand_store,
+        brand=brands[0],
+        location=args.location,
+        radius_m=max(args.radius, 8000),
+    )
+    show("5) find_nearest_brand_store", nearest)
+    if not nearest.get("ok") or nearest.get("count", 0) == 0:
+        failures += 1
+
     combo = call(
         tools.find_malls_with_all_brands,
         location=args.location,
         brands=",".join(brands),
         radius_m=args.radius,
     )
-    show("5) find_malls_with_all_brands", combo, limit=1500)
+    show("6) find_malls_with_all_brands", combo, limit=1500)
     if not combo.get("ok"):
         failures += 1
 

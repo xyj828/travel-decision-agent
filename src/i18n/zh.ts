@@ -20,6 +20,7 @@ const zh = {
   "tool.locate": "地点定位",
   "tool.mall": "附近商场",
   "tool.brand": "品牌匹配",
+  "tool.nearest": "最近门店",
   "tool.distance": "距离计算",
   "tool.plan": "综合推荐",
 

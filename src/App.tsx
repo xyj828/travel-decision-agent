@@ -28,6 +28,7 @@ const LAMP_IDS = [
   'resolve_location',
   'search_nearby_malls',
   'match_brands_in_mall',
+  'find_nearest_brand_store',
   'get_travel_distance',
   'find_malls_with_all_brands',
 ] as const;
@@ -35,6 +36,7 @@ const LAMP_ICONS: Record<string, string> = {
   resolve_location: '📍',
   search_nearby_malls: '🏬',
   match_brands_in_mall: '🏷️',
+  find_nearest_brand_store: '🔎',
   get_travel_distance: '📏',
   find_malls_with_all_brands: '🧭',
 };
@@ -42,6 +44,7 @@ const LAMP_I18N_KEYS: Record<string, string> = {
   resolve_location: 'tool.locate',
   search_nearby_malls: 'tool.mall',
   match_brands_in_mall: 'tool.brand',
+  find_nearest_brand_store: 'tool.nearest',
   get_travel_distance: 'tool.distance',
   find_malls_with_all_brands: 'tool.plan',
 };
