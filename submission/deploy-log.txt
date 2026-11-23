@@ -1,0 +1,27 @@
+部署记录（edgeone makers deploy，2026-11-23 18:25 GMT+8）
+============================================================
+
+[cli] Validating API endpoint...
+[cli][✔] Project travel-decision-agent already exists. Using existing project.
+[cli][✔] Using Project ID: makers-d3g3pvuwzp3s
+[cli] Uploading folder to EdgeOne COS...
+[cli][Uploader] Uploading file: 100%
+[cli][✔] File uploaded successfully
+[cli][✔] Creating deployment in Production environment...
+[cli][✔] Created deployment with Deployment ID: dp2zjk2e277a
+[cli] Waiting for deployment to complete...
+[cli][DeployStatus] Deploying...
+[cli] Deployment in progress... (status: Process, elapsed: ~10s)
+[cli] Deployment in progress... (status: Process, elapsed: ~20s)
+[cli] Deployment in progress... (status: Process, elapsed: ~30s)
+[cli] Deployment in progress... (status: Process, elapsed: ~40s)
+[cli] Deployment in progress... (status: Process, elapsed: ~50s)
+[cli][✔] Deploy Success
+[cli][✔] Deploy URL: https://travel-decision-agent-eln7w3rb.edgeone.cool
+[cli][✔] Console URL: https://console.cloud.tencent.com/edgeone/pages/project/makers-d3g3pvuwzp3s/deployment/dp2zjk2e277a
+
+说明
+----
+本项目由 EdgeOne CLI 创建（直传类型），因此部署走 `edgeone makers deploy`（本地构建后上传），
+而不是 GitHub push 自动部署。代码仍已推送到 GitHub Fork：
+https://github.com/xyj828/travel-decision-agent (main, commit 87d484d)
