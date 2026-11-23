@@ -1,26 +1,27 @@
 const en = {
   // Header
-  "app.title": "OpenAI Agents Starter",
-  "app.subtitle": "Running on EdgeOne Makers with session memory & Agent Tools",
+  "app.title": "Travel Decision Agent",
+  "app.subtitle": "Find nearby malls & match brands, powered by Amap + EdgeOne Makers",
 
   // Empty state
-  "empty.title": "OpenAI Agents Starter",
-  "empty.hint": "I'm an OpenAI Agent running on EdgeOne with custom tools and session memory. I can help with weather, clothing advice, translation, and text statistics.",
+  "empty.title": "Travel Decision Agent",
+  "empty.hint": "Tell me where you are and which brands you want to visit. I will search nearby malls with Amap, check whether those brands have a store there, compare distances, and recommend the closest one.",
   "empty.features": "EdgeOne Store · Session Memory · Agent Tools",
 
   // Chat input
   "chat.placeholder": "Type a message...  ⏎ Send · Shift+⏎ Newline",
-  "chat.hint": "Powered by OpenAI Agents SDK + EdgeOne Makers · Demo only",
+  "chat.hint": "Powered by OpenAI Agents SDK + Amap + EdgeOne Makers",
 
   // Preset questions
-  "preset.1": "What is the weather like in Beijing now? Any clothing suggestions?",
-  "preset.2": "Translate \"Hello, welcome to Beijing!\" into Chinese and count the characters.",
+  "preset.1": "I am near Honglian Nanlu subway station. Recommend a nearby mall that has both Beishengsong and Xitingcunwu.",
+  "preset.2": "If both brands are not required, is there anything closer?",
 
   // Tool indicators
-  "tool.weather": "Weather",
-  "tool.clothing": "Clothing",
-  "tool.translate": "Translate",
-  "tool.statistics": "Statistics",
+  "tool.locate": "Locate",
+  "tool.mall": "Malls",
+  "tool.brand": "Brands",
+  "tool.distance": "Distance",
+  "tool.plan": "Planner",
 
   // Status & errors
   "status.error": "Request failed. Please check if the backend service is running.",

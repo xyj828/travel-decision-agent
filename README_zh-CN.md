@@ -1,20 +1,22 @@
-# OpenAI Agents Starter (Python)
+# 出行决策 Agent（Travel Decision Agent）
 
-跑在 EdgeOne Makers 上的全栈 Python Agent 模板：基于 OpenAI Agents SDK（Python）的流式聊天，包含自定义工具与基于 `context.store` 的会话记忆。
-
-**Framework：** OpenAI Agents SDK · **Category：** Quick Start <!-- TODO: confirm --> · **Language：** Python
-
-[![Deploy to EdgeOne Makers](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://console.cloud.tencent.com/edgeone/pages/new?template=openai-agents-starter-python)
-
-<!-- ![preview](./assets/preview.png)  TODO: confirm -->
+基于 OpenAI Agents SDK（Python）+ 高德地图 Web 服务 API，跑在 EdgeOne Makers 上的全栈 Agent：用户说出位置和品牌偏好，Agent 检索附近商场、核对品牌门店、比较距离并给出推荐。
 
 ## 概述
 
-把 OpenAI Agents SDK（Python）接到 EdgeOne Makers 上的最小但贴近生产形态的模板。完整跑通了流式响应、自定义工具注册、会话存储这条链路，方便你直接 fork，把示例工具（`get_weather`、`get_clothing_advice`、`translate_text`、`text_statistics`）替换成你自己的实现。
+在原 Starter 模板的流式聊天骨架上，把示例工具换成了真实的高德地图能力：
 
-- **SSE 流式聊天** —— 逐 token 推 `text_delta`，命中工具时推 `tool_called`。
-- **自定义 Agent 工具** —— 四个 `@function_tool` 示例，可直接替换。
-- **会话粘性记忆** —— `context.store.openai_session(cid)` 直接喂给 `Runner.run_streamed()` 的 `session` 参数。
+| 工具 | 作用 |
+|------|------|
+| `resolve_location` | 地点（地铁站 / 商场 / 地址 / 经纬度）→ 坐标，带歧义候选 |
+| `search_nearby_malls` | 坐标 → 附近商场，按距离排序 |
+| `match_brands_in_mall` | 某个商场 → 逐个核对品牌门店是否存在 |
+| `get_travel_distance` | 两点 → 直线 / 驾车 / 步行距离与耗时 |
+| `find_malls_with_all_brands` | 一站式：位置 + 品牌清单 → 候选商场排名与最佳推荐 |
+
+- **SSE 流式聊天** —— 逐 token 推 `text_delta`，命中工具时推 `tool_called`（前端 5 个工具指示灯）。
+- **数据不由模型编造** —— 地点、门店、距离全部来自高德返回，工具失败时如实说明原因。
+- **会话粘性记忆** —— `context.store.openai_session(cid)` 直接喂给 `Runner.run_streamed()` 的 `session` 参数，支持「不要求两个品牌同时存在呢」这类追问。
 - **可信取消** —— 后端 `context.utils.abort_active_run()` 真正中断 LLM 调用。
 - **后端拆两层** —— 有状态的长连接放 `agents/`，无状态的 `/history` 放 `cloud-functions/`。
 
@@ -25,8 +27,21 @@
 | `AI_GATEWAY_API_KEY` | 是 | 模型网关 API Key。可填 Makers Models 的 API Key，也可以是任意 OpenAI 兼容服务商的 Key。 |
 | `AI_GATEWAY_BASE_URL` | 是 | 网关 Base URL。Makers Models 请使用 `https://ai-gateway.edgeone.link/v1`。 |
 | `AI_GATEWAY_MODEL` | 否 | 模型 ID。默认 `@makers/deepseek-v4-flash`（内置免费模型）。 |
+| `AMAP_API_KEY` | 是 | 高德「Web 服务」类型的 Key。高德控制台 → 应用管理 → 添加 Key → 服务平台选 **Web服务**。 |
 
 模板遵循 OpenAI 兼容协议，可以指向 Makers Models，也可以指向任意 OpenAI 兼容的服务商。
+
+## 地图工具自检（不消耗模型额度）
+
+填好 `.env` 里的 `AMAP_API_KEY` 后执行：
+
+```bash
+.venv/Scripts/python.exe scripts/check_amap_tools.py
+# 自定义起点与品牌
+.venv/Scripts/python.exe scripts/check_amap_tools.py --location "红莲南路地铁站" --brands "倍轻松,西厅村屋"
+```
+
+它会依次验证定位、商场检索、品牌匹配、距离计算、一站式推荐，并把高德的真实错误码翻译成可读原因。
 
 ### 如何获取 `AI_GATEWAY_API_KEY`
 
@@ -39,16 +54,25 @@
 
 ## 本地开发
 
-前置依赖：Node.js ≥ 18、Python ≥ 3.10，以及 EdgeOne CLI（`npm i -g edgeone`）。
+前置依赖：Node.js ≥ 18、Python ≥ 3.10。EdgeOne CLI 用 `npx edgeone@1.7.6` 调用即可（首次自动下载，无需全局安装）。
 
 ```bash
+# 1. 依赖（本机已装好可直接跳过）
 npm install
-pip install -r requirements.txt
-cp .env.example .env       # 然后填入 AI_GATEWAY_API_KEY / AI_GATEWAY_BASE_URL
-edgeone makers dev
+python -m venv .venv && .venv/Scripts/pip install -r requirements.txt   # macOS/Linux: .venv/bin/pip
+
+# 2. 首次登录腾讯云（浏览器确认，只需一次）
+npx edgeone@1.7.6 login
+
+# 3. 本地启动（会自动同步 Makers 控制台的 AI Gateway Key 与环境变量）
+npx edgeone@1.7.6 makers dev
 ```
 
+首次启动会询问要绑定的项目；若控制台里已经创建了 `travel-decision-agent` 项目，直接选择它。
 本地观测面板：`http://localhost:8080/agent-metrics`。
+
+> `.env` 里只需自己填 `AMAP_API_KEY`；`AI_GATEWAY_API_KEY` 一般由 `makers dev` 自动写入。
+> 也可以手动在 Makers 控制台 → 模型与密钥 生成后粘贴。
 
 ## 项目结构
 
