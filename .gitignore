@@ -39,3 +39,10 @@ plan/
 # AI assistant local instructions
 CLAUDE.md
 AGENTS.md
+
+# Tencent Cloud EdgeOne
+.env
+.edgeone/*
+.tef_dist/*
+# Vite temp files
+vite.config.ts.timestamp-*

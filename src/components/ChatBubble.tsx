@@ -2,6 +2,7 @@ import { memo } from 'react';
 import type { Message } from '../types';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkCjkFriendly from 'remark-cjk-friendly';
 import { useT } from '../i18n';
 import styles from './ChatBubble.module.css';
 
@@ -78,7 +79,7 @@ export default memo(function ChatBubble({ message }: Props) {
           message.content
         ) : (
           <div className={`${styles.markdown} ${message.streaming ? styles.markdownStreaming : ''}`}>
-            <Markdown remarkPlugins={[remarkGfm]}>{normalizeMarkdown(message.content)}</Markdown>
+            <Markdown remarkPlugins={[remarkGfm, remarkCjkFriendly]}>{normalizeMarkdown(message.content)}</Markdown>
           </div>
         )}
         <span className={styles.time}>
