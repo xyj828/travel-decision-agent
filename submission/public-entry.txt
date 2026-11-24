@@ -2,7 +2,7 @@
 ===============================
 
 公开预览地址（带访问令牌，直接点开即可）：
-https://travel-decision-agent-eln7w3rb.edgeone.cool?eo_token=ce16c54de64aa60d966fcec2d66b4e88&eo_time=1795429520
+https://travel-decision-agent-eln7w3rb.edgeone.cool?eo_token=2b4463cfe68f93f8e8369beb30a65724&eo_time=1795482789
 
 同一地址（不含令牌时返回 401，属 EdgeOne 临时预览的默认保护）：
 https://travel-decision-agent-eln7w3rb.edgeone.cool
@@ -11,15 +11,16 @@ https://travel-decision-agent-eln7w3rb.edgeone.cool
 --------
 项目名称   : travel-decision-agent
 Project ID : makers-d3g3pvuwzp3s
-部署 ID    : dp2zjk2e277a
+部署 ID    : dp0wqc76if5l（最新，2026-11-24 09:13 重新部署）
 环境       : Production
-部署时间   : 2026-11-23 18:25 (GMT+8)
-控制台地址 : https://console.cloud.tencent.com/edgeone/pages/project/makers-d3g3pvuwzp3s/deployment/dp2zjk2e277a
+部署时间   : 2026-11-24 09:13 (GMT+8)
+上一次部署 : dp2zjk2e277a（2026-11-23 18:25，其预览令牌已于次日过期）
+控制台地址 : https://console.cloud.tencent.com/edgeone/pages/project/makers-d3g3pvuwzp3s/deployment/dp0wqc76if5l
 
-线上验证记录（2026-11-23 18:27）
+线上验证记录（2026-11-24 09:13 重新部署后复测）
 ------------------------------
 1. GET  /          → 200，页面标题「出行决策 Agent | EdgeOne Makers」
-2. POST /chat      → 200，SSE 正常推流（336 个 text_delta）
+2. POST /chat      → 200，SSE 正常推流（369 个 text_delta）
                      tool_called: find_malls_with_all_brands
                      回答：推荐「龙湖北京丽泽天街」，距红莲南路地铁站 1222 米（约 1.2 公里），
                      倍轻松（breo）在商场内约 38 米，西町村屋（用户所说的「西厅村屋」）约 46 米
