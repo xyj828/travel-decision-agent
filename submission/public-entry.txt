@@ -29,3 +29,16 @@ Project ID : makers-d3g3pvuwzp3s
 线上环境变量（已在 Makers 控制台生效）
 ------------------------------
 AMAP_API_KEY / AI_GATEWAY_BASE_URL / AI_GATEWAY_MODEL / AI_GATEWAY_API_KEY
+
+访问说明（重要）
+----------------
+本项目未绑定自定义域名，使用的是 EdgeOne 部署时生成的「临时预览域名」，
+访问需要携带 deploy 输出的 ?eo_token=...&eo_time=... 令牌，令牌有时效（约 24 小时），
+过期后打开会显示 401「访问受限或认证已过期」——这是访问令牌过期，不是部署失效。
+
+重新获取可用链接的两种方式：
+1. 控制台 → 项目 travel-decision-agent → 项目概览 → 右上角「预览」按钮，会给出新的带令牌链接；
+2. 重新执行 `npx edgeone@1.7.6 makers deploy`，部署完成后会输出新的 Deploy URL。
+
+如需长期公开访问（选做项）：控制台 → 域名管理 → 添加自定义域名 → 配置 DNS 并等待 HTTPS 生效。
+注意：当前加速区域为「全球可用区（含中国大陆）」，域名需完成 ICP 备案；也可改用不含中国大陆的区域。
